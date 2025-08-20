@@ -1,0 +1,128 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CitasDrive - Sistema de Gestión de Citas</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+</head>
+<body>
+    <!-- Navbar Container -->
+    <div id="navbar-container">
+        <nav class="navbar navbar-dark bg-dark fixed-top" style="width: 250px; height: 100vh; left: 0; z-index: 1000;">
+            <div class="container-fluid flex-column h-100 py-3">
+                <!-- Logo -->
+                <a class="navbar-brand mb-4" href="#"
+                   data-bind="click: function() { navBarViewModel.changeModule({id: 'dashboard'}) }">
+                    <i class="bi bi-calendar-check me-2"></i>
+                    CitasDrive
+                </a>
+
+                <!-- Menú de navegación -->
+                <ul class="nav nav-pills flex-column w-100">
+                    <!-- Dashboard -->
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="#"
+                           data-bind="click: function() { navBarViewModel.changeModule({id: 'dashboard'}) }">
+                            <i class="bi bi-house"></i>
+                            <span class="ms-2">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <!-- Pacientes -->
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="#"
+                           data-bind="click: function() { navBarViewModel.changeModule({id: 'patients'}) }">
+                            <i class="bi bi-people"></i>
+                            <span class="ms-2">Pacientes</span>
+                        </a>
+                    </li>
+
+                    <!-- Citas -->
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="#"
+                           data-bind="click: function() { navBarViewModel.changeModule({id: 'appointments'}) }">
+                            <i class="bi bi-calendar"></i>
+                            <span class="ms-2">Citas</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Footer -->
+                <div class="text-white-50 small mt-auto">
+                    v1.0.0
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- TopBar Container -->
+    <div id="topbar-container">
+        <nav class="navbar navbar-light bg-white border-bottom fixed-top"
+             style="margin-left: 250px; height: 60px; z-index: 999;">
+            <div class="container-fluid justify-content-end">
+                <span class="navbar-text me-3">Hola, Usuario</span>
+                <button class="btn btn-outline-danger btn-sm"
+                        data-bind="click: topBarViewModel.logout">
+                    <i class="bi bi-box-arrow-right"></i>
+                    Cerrar Sesión
+                </button>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <main id="main-content" class="container-fluid"
+          style="margin-left: 250px; margin-top: 60px; padding: 20px; min-height: calc(100vh - 60px);">
+        <!-- Contenido dinámico se cargará aquí -->
+        <div class="welcome-message">
+            <h1>Bienvenido a CitasDrive</h1>
+            <p class="lead">Selecciona un módulo desde el menú de la izquierda.</p>
+        </div>
+    </main>
+
+    <!-- Modal Container -->
+    <div id="modal-container"></div>
+
+    <!-- Libraries -->
+    <script src="js/libraries/jquery-3.7.1.min.js"></script>
+    <script src="js/libraries/bootstrap.bundle.min.js"></script>
+    <script src="js/libraries/knockout-3.5.1.js"></script>
+
+    <!-- ViewModels -->
+    <script src="js/viewmodels/appViewModel.js"></script>
+    <script src="js/viewmodels/patientsViewModel.js"></script>
+
+    <!-- Components -->
+    <script src="js/components/navbar/NavBar.js"></script>
+    <script src="js/components/topbar/TopBar.js"></script>
+
+    <!-- Bootstrap Modal Component -->
+    <script src="js/components/modal/Modal.js"></script>
+
+    <!-- Bindings application -->
+    <script>
+        // Aplicar bindings UNA SOLA VEZ cuando todo esté cargado
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('Aplicando bindings...');
+
+            // Aplicar bindings al body completo
+            try {
+                ko.applyBindings(appViewModel, document.body);
+                console.log('Bindings aplicados correctamente');
+
+                // Iniciar con dashboard
+                appViewModel.mostrarDashboard();
+
+            } catch (error) {
+                console.error('Error aplicando bindings:', error);
+            }
+        });
+    </script>
+</body>
+</html>

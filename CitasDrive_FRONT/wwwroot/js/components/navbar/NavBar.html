@@ -1,0 +1,33 @@
+﻿<nav class="navbar navbar-dark bg-dark fixed-top" style="width: 250px; height: 100vh; left: 0;">
+    <div class="container-fluid flex-column h-100 py-3">
+        <a class="navbar-brand mb-4" href="#">
+            <i class="bi bi-calendar-check me-2"></i>
+            CitasDrive
+        </a>
+
+        <ul class="nav nav-pills flex-column w-100">
+            <li class="nav-item">
+                <a class="nav-link text-white" href="#" data-bind="click: function() { navBarViewModel.changeModule({id: 'dashboard'}) }">
+                    <i class="bi bi-house"></i>
+                    <span class="ms-2">Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" href="#" data-bind="click: function() { navBarViewModel.changeModule({id: 'patients'}) }">
+                    <i class="bi bi-people"></i>
+                    <span class="ms-2">Pacientes</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" href="#" data-bind="click: function() { navBarViewModel.changeModule({id: 'appointments'}) }">
+                    <i class="bi bi-calendar"></i>
+                    <span class="ms-2">Citas</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="text-white-50 small mt-auto">
+            v1.0.0
+        </div>
+    </div>
+</nav>
