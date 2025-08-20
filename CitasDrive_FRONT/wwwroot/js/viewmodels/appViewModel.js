@@ -30,7 +30,6 @@
                 if (container) {
                     container.innerHTML = html;
 
-                    // ✅ SOLUCIÓN: Aplicar bindings MANUALMENTE después de cargar
                     ko.applyBindings(patientsViewModel, container);
 
                     patientsViewModel.getPatients();
@@ -49,7 +48,6 @@
         `;
     };
 
-    // Inicializar con dashboard
     self.mostrarDashboard();
 }
 

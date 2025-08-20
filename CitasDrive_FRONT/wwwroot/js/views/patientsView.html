@@ -19,7 +19,7 @@
                 <td data-bind="text: tipo_docum"></td>
                 <td data-bind="text: num_docum"></td>
                 <td data-bind="text: genero"></td>
-                <td data-bind="text: fecha_nacim"></td>
+                <td data-bind="text: fecha_nacim ? fecha_nacim.split('T')[0] : 'N/A'"></td> <!-- sentencia para quitar la hora del date -->
                 <td data-bind="text: num_celular"></td>
                 <td>
                     <button class="btn btn-sm btn-outline-primary me-1"

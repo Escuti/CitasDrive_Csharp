@@ -37,13 +37,15 @@
 
     // form para add nuevo paciente
     self.showAddForm = function () {
+        self.selectedPatient(null);
         if (typeof modalViewModel !== 'undefined') {
             modalViewModel.showPatientModal();
         }
     };
 
-    // Mostrar modal para editar
+    // Mostrar modal para editar (en proceso aún)
     self.editPatient = function (patient) {
+        self.selectedPatient(patient);
         if (typeof modalViewModel !== 'undefined') {
             modalViewModel.showPatientModal(patient);
         }
@@ -62,17 +64,24 @@
 
         console.log("Guardando:", patientData);
 
-        // Aquí va tu lógica de guardado en la API
-        fetch(API_URL, {
-            method: 'POST',
+        const isEditing = self.selectedPatient() !== null; //evaluar si hay id o no para usar PUT o POST
+        const url = isEditing
+            ? `${API_URL}/${self.selectedPatient().id_paciente}`
+            : API_URL;
+        const method = isEditing ? 'PUT' : 'POST';
+
+        // conexión con API
+        fetch(url, {
+            method: method,
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(patientData)
         })
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
-                    alert('Paciente guardado');
+                    alert(isEditing ? 'Paciente actualizado' : 'Paciente guardado');
                     self.getPatients();
+                    self.selectedPatient(null);
                 } else {
                     alert('Error: ' + data.message);
                 }
@@ -80,7 +89,6 @@
             .catch(err => alert('Error: ' + err));
     };
 
-    // Eliminar paciente
     self.deletePatient = function (patient) {
         if (confirm(`¿Estás seguro de eliminar al paciente ${patient.nombre}?`)) {
             fetch(`${API_URL}/${patient.id_paciente}`, { method: "DELETE" })
