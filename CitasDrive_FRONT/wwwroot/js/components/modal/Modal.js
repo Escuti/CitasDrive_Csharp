@@ -1,7 +1,6 @@
 ﻿function ModalViewModel() {
     var self = this;
 
-    // Mostrar modal de paciente
     self.showPatientModal = function (patientData = null) {
         const isEdit = patientData !== null;
         const title = isEdit ? 'Editar Paciente' : 'Agregar Paciente';
@@ -18,43 +17,42 @@
                             <form id="patientForm">
                                 <div class="mb-3">
                                     <label class="form-label">Tipo Documento</label>
-                                    <select class="form-select" id="tipo_docum">
+                                    <select class="form-select" data-bind="value: formData.tipo_docum">
                                         <option value="">Seleccione</option>
                                         <option value="cédula">Cédula</option>
-                                        <option value="pasaporte">Pasaporte</option>
                                         <option value="tarjeta de identidad">Tarjeta de Identidad</option>
+                                        <option value="pasaporte">Pasaporte</option>
                                     </select>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Número Documento</label>
-                                    <input type="text" class="form-control" id="num_docum">
+                                    <input type="text" class="form-control" data-bind="value: formData.num_docum">
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Nombre</label>
-                                    <input type="text" class="form-control" id="nombre">
+                                    <input type="text" class="form-control" data-bind="value: formData.nombre">
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Género</label>
-                                    <select class="form-select" id="genero">
+                                    <select class="form-select" data-bind="value: formData.genero">
                                         <option value="">Seleccione</option>
                                         <option value="Masculino">Masculino</option>
                                         <option value="Femenino">Femenino</option>
-                                        <option value="Otro">Otro</option>
                                     </select>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Fecha Nacimiento</label>
-                                    <input type="date" class="form-control" id="fecha_nacim">
+                                    <input type="date" class="form-control" data-bind="value: formData.fecha_nacim">
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Celular</label>
-                                    <input type="text" class="form-control" id="num_celular">
+                                    <input type="text" class="form-control" data-bind="value: formData.num_celular">
                                 </div>
                             </form>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="button" class="btn btn-primary" onclick="patientsViewModel.savePatient()">Guardar</button>
+                            <button type="button" class="btn btn-primary" data-bind="click: savePatient" data-bs-dismiss="modal">Guardar</button>
                         </div>
                     </div>
                 </div>
@@ -63,14 +61,14 @@
 
         document.getElementById('modal-container').innerHTML = modalHTML;
 
-        // Llenar datos si es edición
+        // ✅ APPLY BINDINGS SEGURO
+        const container = document.getElementById('modal-container');
+        ko.cleanNode(container); // ← Limpiar antes de aplicar
+        ko.applyBindings(patientsViewModel, container);
+
+        // ✅ LLENAR DATOS CON KO MAPPING (no manual)
         if (isEdit) {
-            document.getElementById('tipo_docum').value = patientData.tipo_docum || '';
-            document.getElementById('num_docum').value = patientData.num_docum || '';
-            document.getElementById('nombre').value = patientData.nombre || '';
-            document.getElementById('genero').value = patientData.genero || '';
-            document.getElementById('fecha_nacim').value = patientData.fecha_nacim || '';
-            document.getElementById('num_celular').value = patientData.num_celular || '';
+            ko.mapping.fromJS(patientData, patientsViewModel.formData);
         }
 
         const modal = new bootstrap.Modal(document.getElementById('patientModal'));

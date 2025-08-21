@@ -6,14 +6,14 @@
     self.patients = ko.observableArray([]);
     self.selectedPatient = ko.observable(null);
 
-    self.formData = {
-        tipo_docum: ko.observable(""),
-        num_docum: ko.observable(""),
-        nombre: ko.observable(""),
-        genero: ko.observable(""),
-        fecha_nacim: ko.observable(""),
-        num_celular: ko.observable("")
-    };
+    self.formData = ko.mapping.fromJS({
+        tipo_docum: "",
+        num_docum: "",
+        nombre: "",
+        genero: "",
+        fecha_nacim: "",
+        num_celular: ""
+    });
 
     // Carga datos de BD
     self.getPatients = function () {
@@ -37,15 +37,18 @@
 
     // form para add nuevo paciente
     self.showAddForm = function () {
-        self.selectedPatient(null);
+        self.resetForm();
         if (typeof modalViewModel !== 'undefined') {
             modalViewModel.showPatientModal();
         }
     };
 
-    // Mostrar modal para editar (en proceso aún)
+    // Mostrar modal para editar
     self.editPatient = function (patient) {
         self.selectedPatient(patient);
+
+        ko.mapping.fromJS(patient, self.formData);
+
         if (typeof modalViewModel !== 'undefined') {
             modalViewModel.showPatientModal(patient);
         }
@@ -53,14 +56,7 @@
 
     // Guardar paciente (llamado desde el modal)
     self.savePatient = function () {
-        const patientData = {
-            tipo_docum: document.getElementById('tipo_docum').value,
-            num_docum: document.getElementById('num_docum').value,
-            nombre: document.getElementById('nombre').value,
-            genero: document.getElementById('genero').value,
-            fecha_nacim: document.getElementById('fecha_nacim').value,
-            num_celular: document.getElementById('num_celular').value
-        };
+        const patientData = ko.mapping.toJS(self.formData);
 
         console.log("Guardando:", patientData);
 
@@ -69,6 +65,8 @@
             ? `${API_URL}/${self.selectedPatient().id_paciente}`
             : API_URL;
         const method = isEditing ? 'PUT' : 'POST';
+
+        console.log("JSON a enviar:", JSON.stringify(patientData, null, 2));
 
         // conexión con API
         fetch(url, {
@@ -107,13 +105,19 @@
 
     // Limpiar form
     self.resetForm = function () {
-        self.formData.tipo_docum("");
-        self.formData.num_docum("");
-        self.formData.nombre("");
-        self.formData.genero("");
-        self.formData.fecha_nacim("");
-        self.formData.num_celular("");
+        ko.mapping.fromJS({
+            tipo_docum: "",
+            num_docum: "",
+            nombre: "",
+            genero: "",
+            fecha_nacim: "",
+            num_celular: ""
+        }, self.formData);
+
+        self.selectedPatient(null);
     };
+
+    self.getPatients();
 }
 
 var patientsViewModel = new PatientsViewModel();
